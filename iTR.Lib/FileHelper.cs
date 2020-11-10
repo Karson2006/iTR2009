@@ -99,14 +99,14 @@ namespace iTR.Lib
         }
 
         //根据base64传过来的data判断
-        public static bool UploadFile(string base64String, string path,long fileID,string Name,string EmployeeID)
+        public static bool UploadFile(string base64String, string path,long fileID,string name,string fileSize,string mimeType,string EmployeeID)
         {
             bool flag = false;
             try
             {
                 byte[] fs = Convert.FromBase64String(base64String);
                
-                string fileSize = ((base64String.Replace("=", "").Length/8)*2).ToString();
+               // string fileSize = ((base64String.Replace("=", "").Length/8)*2).ToString();
 
                 //获取上传案例图片路径
                  string fullpath = System.Web.HttpContext.Current.Server.MapPath(path);
@@ -119,14 +119,14 @@ namespace iTR.Lib
                 MemoryStream m = new MemoryStream(fs);
                 //定义实际文件对象，保存上载的文件。
                 FileStream f = new FileStream(fullpath + "\\" + fileID, FileMode.Create);
-                //把内内存里的数据写入物理文件
+                //把内存里的数据写入物理文件
                 m.WriteTo(f);
                 m.Close();
                 f.Close();
                 f = null;
                 m = null;           
                 SQLServerHelper runner = new SQLServerHelper();
-                string sql = $"insert into [yaodaibao].[dbo].[CTP_FILE](ID,FILENAME,MIME_TYPE,CREATE_DATE,CREATE_MEMBER,FILE_SIZE) values('{fileID}','{Name}','{"text/plain"}','{DateTime.Now.ToString()}','{EmployeeID}','{fileSize}')";
+                string sql = $"insert into [yaodaibao].[dbo].[CTP_FILE](ID,FILENAME,MIME_TYPE,CREATE_DATE,CREATE_MEMBER,FILE_SIZE) values('{fileID}','{name}','{mimeType}','{DateTime.Now.ToString()}','{EmployeeID}','{fileSize}')";
                 runner.ExecuteSqlNone(sql);
                 runner = null;
                 flag = true;
@@ -136,102 +136,7 @@ namespace iTR.Lib
                 throw ex;
             }
             return flag;
-        }
-
-
-        private static string GetFileExtension(string base64String)
-        {
-            var data = base64String.Substring(0, 5);
-            switch (data.ToUpper())
-            {
-                case "IVBOR":
-                    return "png";
-                case "/9J/4":
-                    return "jpg";
-                case "JVBER":
-                    return "pdf";
-                case "AAABA":
-                    return "ico";
-                case "UMFYI":
-                    return "rar";
-                case "E1XYD":
-                    return "rtf";
-                case "U1PKC":
-                    return "txt";
-                case "MQOWM":
-                case "77U/M":
-                    return "srt";
-                default:
-                    return string.Empty;
-            }
-        }
-        /// <summary>
-        /// 返回真实的文件类型
-        /// </summary>
-        /// <param name="path">文件路径</param>
-
-        public static string CheckTrueFileName(string path)
-        {
-            string bx = "";
-            try
-            {
-                System.IO.FileStream fs = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                System.IO.BinaryReader r = new System.IO.BinaryReader(fs);
-                byte buffer;
-                buffer = r.ReadByte();
-                bx += buffer.ToString();
-                r.Close();
-                fs.Close();
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine(exc.Message);
-            }
-;
-            return bx;
-            ////
-            //Console.WriteLine(bx);
-            ////文件名，包括格式
-            //Console.WriteLine(System.IO.Path.GetFileName(path));
-            ////文件名， 不包括格式
-            //Console.WriteLine(System.IO.Path.GetFileNameWithoutExtension(path));
-            ////文件格式
-            //Console.WriteLine(System.IO.Path.GetExtension(path));
-            //Console.ReadLine();
-        }
-
-        public enum FileExtension
-        {
-            JPG = 255216,
-            GIF = 7173,
-            BMP = 6677,
-            PNG = 13780,
-            COM = 7790,
-            EXE = 7790,
-            DLL = 7790,
-            RAR = 8297,
-            ZIP = 8075,
-            XML = 6063,
-            HTML = 6033,
-            ASPX = 239187,
-            CS = 117115,
-            JS = 119105,
-            TXT = 210187,
-            SQL = 255254,
-            BAT = 64101,
-            BTSEED = 10056,
-            RDP = 255254,
-            PSD = 5666,
-            PDF = 3780,
-            CHM = 7384,
-            LOG = 70105,
-            REG = 8269,
-            HLP = 6395,
-            DOC = 208207,
-            XLS = 208207,
-            DOCX = 208207,
-            XLSX = 208207,
-        }
+        }        
     }
 }
 
