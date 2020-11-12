@@ -99,26 +99,25 @@ namespace iTR.Lib
         }
 
         //根据base64传过来的data判断
-        public static bool UploadFile(string base64String, string path,long fileID,string name,string fileSize,string mimeType,string EmployeeID)
+        public static bool UploadFile(string base64String, string path,long fileID,string sql)
         {
             bool flag = false;
             try
             {
+
                 byte[] fs = Convert.FromBase64String(base64String);
                
-               // string fileSize = ((base64String.Replace("=", "").Length/8)*2).ToString();
+                // string fileSize = ((base64String.Replace("=", "").Length/8)*2).ToString();
 
-                //获取上传案例图片路径
-                 string fullpath = System.Web.HttpContext.Current.Server.MapPath(path);
                 //string fullpath = @"D:\Work\yaodaibao\Code\Release\Files";/// 调试用
-                if (!Directory.Exists(fullpath))
+                if (!Directory.Exists(path))
                 {
-                    Directory.CreateDirectory(fullpath);
+                    Directory.CreateDirectory(path);
                 }
                 //定义并实例化一个内存流，以存放提交上来的字节数组。
                 MemoryStream m = new MemoryStream(fs);
                 //定义实际文件对象，保存上载的文件。
-                FileStream f = new FileStream(fullpath + "\\" + fileID, FileMode.Create);
+                FileStream f = new FileStream(path + "\\" + fileID, FileMode.Create);
                 //把内存里的数据写入物理文件
                 m.WriteTo(f);
                 m.Close();
@@ -126,7 +125,6 @@ namespace iTR.Lib
                 f = null;
                 m = null;           
                 SQLServerHelper runner = new SQLServerHelper();
-                string sql = $"insert into [yaodaibao].[dbo].[CTP_FILE](ID,FILENAME,MIME_TYPE,CREATE_DATE,CREATE_MEMBER,FILE_SIZE) values('{fileID}','{name}','{mimeType}','{DateTime.Now.ToString()}','{EmployeeID}','{fileSize}')";
                 runner.ExecuteSqlNone(sql);
                 runner = null;
                 flag = true;
@@ -136,7 +134,20 @@ namespace iTR.Lib
                 throw ex;
             }
             return flag;
-        }        
+        }       
+        /// <summary>
+        /// 检查文件类型
+        /// </summary>
+        /// <param name="filename">上传文件名</param>
+        public static void CheckFileType(string filename)
+        {
+            List<string> filterType = new List<string>() { "exe","php", "bat", "asp", "jsp","js", "vbs", "wsf", "wsh","sh","shell","perl","sql","python","ruby","lua" };
+            string[] name= filename.Split('.');
+            if (filterType.Contains(name[name.Length-1].ToLower()))
+            {
+                throw new Exception("上传文件失败，不允许上传此类型文件！");
+            }
+        }
     }
 }
 
