@@ -19,9 +19,8 @@ namespace iTR.Lib
 {
     public class Common
     {
-
-
         #region 非对称加密、解密
+
         public static string RSAEncrypt(string publicKey, string message)
         {
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
@@ -66,19 +65,21 @@ namespace iTR.Lib
             }
             return result;
         }
-        #endregion
+
+        #endregion 非对称加密、解密
 
         #region 解码邀请码
+
         public static string Decode(string code)
         {
-            //提取用户id  
+            //提取用户id
             string str = "";
             string uid = "";
             for (int i = 0; i < code.Length; i += 2)
             {
                 str += code.Substring(i, 1);
             }
-            //剔除高位零  
+            //剔除高位零
             for (int i = 0; i < str.Length; i++)
             {
                 if (!str.Substring(i, 1).Equals("0"))
@@ -91,18 +92,20 @@ namespace iTR.Lib
 
             return uid;
         }
-        #endregion
+
+        #endregion 解码邀请码
 
         #region 生成邀请码
+
         public static string CreateCode(int uid)
         {
-            //十进制转十六进制  
+            //十进制转十六进制
             string hexid = Convert.ToString(uid, 16);
 
             int len = 8;
             string sourcecode = "MWX89FCDG3J2RS1TUKLYZE5V67HQA4BNP";
 
-            //高位补零  
+            //高位补零
             string str = "";
 
             for (int i = len / 2; i > hexid.Length; i--)
@@ -111,7 +114,7 @@ namespace iTR.Lib
             }
             str += hexid;
 
-            //插入随机字符  
+            //插入随机字符
 
             Random ran = new Random();
             for (int i = 1; i < str.Length + 1; i += 2)
@@ -120,24 +123,26 @@ namespace iTR.Lib
             }
             return str;
         }
-        #endregion
+
+        #endregion 生成邀请码
 
         #region DES加密/解密
+
         //默认密钥向量,用于密码加密
         public const string DesKey = @"TR-Karon";
+
         private static byte[] Keys = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-        /// <summary>  
-        /// DES加密字符串  
-        /// </summary>  
-        /// <param name="encryptString">待加密的字符串</param>  
-        /// <param name="encryptKey">加密密钥,要求为8位</param>  
-        /// <returns>加密成功返回加密后的字符串，失败返回源串</returns>  
+
+        /// <summary>
+        /// DES加密字符串
+        /// </summary>
+        /// <param name="encryptString">待加密的字符串</param>
+        /// <param name="encryptKey">加密密钥,要求为8位</param>
+        /// <returns>加密成功返回加密后的字符串，失败返回源串</returns>
         public static string EncryptDES(string encryptString, string encryptKey)
         {
-
             try
             {
-
                 byte[] rgbKey = Encoding.UTF8.GetBytes(encryptKey.Substring(0, 8));
 
                 byte[] rgbIV = Keys;
@@ -155,26 +160,23 @@ namespace iTR.Lib
                 cStream.FlushFinalBlock();
 
                 return Convert.ToBase64String(mStream.ToArray());
-
             }
-
             catch
             {
                 return encryptString;
             }
         }
-        /// <summary>  
-        /// DES解密字符串  
-        /// </summary>  
-        /// <param name="decryptString">待解密的字符串</param>  
-        /// <param name="decryptKey">解密密钥,要求为8位,和加密密钥相同</param>  
-        /// <returns>解密成功返回解密后的字符串，失败返源串</returns>  
+
+        /// <summary>
+        /// DES解密字符串
+        /// </summary>
+        /// <param name="decryptString">待解密的字符串</param>
+        /// <param name="decryptKey">解密密钥,要求为8位,和加密密钥相同</param>
+        /// <returns>解密成功返回解密后的字符串，失败返源串</returns>
         public static string DecryptDES(string decryptString, string decryptKey)
         {
-
             try
             {
-
                 byte[] rgbKey = Encoding.UTF8.GetBytes(decryptKey);
 
                 byte[] rgbIV = Keys;
@@ -193,16 +195,16 @@ namespace iTR.Lib
 
                 return Encoding.UTF8.GetString(mStream.ToArray());
             }
-
             catch
             {
                 return decryptString;
             }
-
         }
-        #endregion
+
+        #endregion DES加密/解密
 
         #region DataTableToXml
+
         ///List:DataRows/DataRow
         ///Detail:DataRow
         ///Main:None DataRow
@@ -283,11 +285,13 @@ namespace iTR.Lib
             }
             return result;
         }
-        #endregion
+
+        #endregion DataTableToXml
 
         #region DataTableToXmlEx
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="mainform">主表DataTable</param>
         /// <param name="sonform">字表DataTable</param>
@@ -353,7 +357,6 @@ namespace iTR.Lib
                     }
                 }
 
-
                 //子表数据
                 pNode = doc.SelectSingleNode(nodeName + " /DataRows");
                 foreach (DataRow sonRow in sonform.Rows)
@@ -394,22 +397,22 @@ namespace iTR.Lib
 
                             cNode.AppendChild(vNode);
                         }
-
                     }
 
                     pNode.AppendChild(cNode);
-
                 }
                 result = doc.OuterXml;
                 return result;
             }
             return result;
         }
-        #endregion
+
+        #endregion DataTableToXmlEx
 
         #region GetFieldValuesFromXmlEx
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="xmlString">Xml格式参数字符串</param>
         /// <param name="callType">方法，也是Xml参数的根节点</param>
@@ -454,7 +457,6 @@ namespace iTR.Lib
                                     throw new Exception(fieldNode.Attributes["ErrMassage"].Value);
                                 }
                             }
-
                         }
                     }
 
@@ -486,9 +488,7 @@ namespace iTR.Lib
                                 }
                             }
 
-
                             dicfield[colName] = cNode.InnerText.Trim();
-
                         }
                         rows.Add(dicfield);
                     }
@@ -542,7 +542,6 @@ namespace iTR.Lib
                         rows.Add(dicfield);
                     }
                 }
-
             }
             catch (Exception err)
             {
@@ -551,9 +550,11 @@ namespace iTR.Lib
             results = rows;
             return result;
         }
-        #endregion
+
+        #endregion GetFieldValuesFromXmlEx
 
         #region 获取罗盘UI配置信息
+
         public static string GetCompassConfigFromXml(string fieldNodeName)
         {
             string result = "";
@@ -572,13 +573,11 @@ namespace iTR.Lib
                 fieldconfigDoc.Load(xmlFileName);
                 XmlNode fieldNode = fieldconfigDoc.SelectSingleNode("FormCofiguration/CompassConfig/" + fieldNodeName);
 
-          
-                if (result==null)
+                if (result == null)
                 {
                     return "";
                 }
                 result = fieldNode.Attributes["UI"].InnerText;
-
             }
             catch (Exception err)
             {
@@ -587,9 +586,10 @@ namespace iTR.Lib
             return result;
         }
 
+        #endregion 获取罗盘UI配置信息
 
-        #endregion
         #region GetFieldValuesFromXml
+
         public static Dictionary<string, string> GetFieldValuesFromXml(string xmlString, string callType, string fieldNodeName = "", string valMode = "1")
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
@@ -633,10 +633,13 @@ namespace iTR.Lib
                             {
                                 case "1"://整数
                                     break;
+
                                 case "2"://小数
                                     break;
+
                                 case "3"://文本
                                     break;
+
                                 default://
                                     break;
                             }
@@ -653,13 +656,13 @@ namespace iTR.Lib
             }
             return result;
         }
-        #endregion
 
+        #endregion GetFieldValuesFromXml
 
         #region GetImageXmlString
+
         public static void SetImageXmlNode(string pageID, string ownerID, ref XmlNode result, ref XmlDocument doc)
         {
-
             //XmlDocument doc = new XmlDocument();
 
             //doc.LoadXml("<Images></Images>");
@@ -674,7 +677,6 @@ namespace iTR.Lib
             {
                 foreach (DataRow row in dt.Rows)
                 {
-
                     XmlNode cNode = doc.CreateElement("Image");
                     cNode.InnerText = url + "/" + row["FPath2"].ToString();
                     XmlAttribute attr = doc.CreateAttribute("Original");
@@ -683,12 +685,12 @@ namespace iTR.Lib
                     result.AppendChild(cNode);
                 }
             }
-
         }
-        #endregion
 
+        #endregion GetImageXmlString
 
         #region CalcWeekDay
+
         public static bool CalcWeekDay(int year, int week, out DateTime first, out DateTime last)
         {
             first = DateTime.MinValue;
@@ -707,9 +709,11 @@ namespace iTR.Lib
             //结束日期跨年
             return (last <= end);
         }
-        #endregion
+
+        #endregion CalcWeekDay
 
         #region SerializeDataTableToJson
+
         /// <summary>
         /// 将DataTable返回JSon
         /// </summary>
@@ -722,12 +726,12 @@ namespace iTR.Lib
             IsoDateTimeConverter timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy'-'MM'-'dd HH':'mm':'ss" };
             rtn = Newtonsoft.Json.JsonConvert.SerializeObject(dt, Newtonsoft.Json.Formatting.Indented, timeConverter);
             return rtn;
-
         }
-        #endregion
 
+        #endregion SerializeDataTableToJson
 
         #region DataTalbeToJson
+
         /// <summary>
         /// 将DataTable返回JSon
         /// </summary>
@@ -766,8 +770,6 @@ namespace iTR.Lib
                         {
                             listString.Append("\"" + dt.Columns[colindex].ColumnName + "\":" + "\"" + dt.Rows[rowindex][colindex].ToString() + "\"");
                         }
-
-
                     }
                     if (rowindex == dt.Rows.Count - 1)
                     {
@@ -777,27 +779,23 @@ namespace iTR.Lib
                     {
                         listString.Append("},");
                     }
-
                 }
-
-
             }
             catch (Exception err)
             {
                 errcode = "-1";
                 description = err.Message;
-
             }
 
             result = "{\"errcode\": \"" + errcode + "\",\"description\": \"" + description + "\",\"list\": [" + listString.ToString() + "]}";
 
             return result;
-
         }
-        #endregion
 
+        #endregion DataTalbeToJson
 
         #region XML2Json
+
         public static string XML2Json(string str, string nodename)
         {
             string result = null;
@@ -807,9 +805,11 @@ namespace iTR.Lib
             result = Newtonsoft.Json.JsonConvert.SerializeXmlNode(node);
             return result;
         }
-        #endregion
+
+        #endregion XML2Json
 
         #region XML2Json
+
         public static string Json2XML(string jsonstring, string rootNode = "root")
         {
             //string result = null;
@@ -832,7 +832,6 @@ namespace iTR.Lib
                 nRoot.AppendChild(element);
             }
             return doc.OuterXml;
-
         }
 
         private static void KeyValue2Xml(XmlElement node, KeyValuePair<string, object> Source)
@@ -857,7 +856,6 @@ namespace iTR.Lib
                     KeyValue2Xml(xitem, item);
                     node.AppendChild(xitem);
                 }
-
             }
             else
             {
@@ -866,7 +864,7 @@ namespace iTR.Lib
             }
         }
 
-        #endregion
+        #endregion XML2Json
 
         /// <summary>
         /// 从DataService.dbo.SysInfo 表读取关键参数值,
@@ -896,7 +894,6 @@ namespace iTR.Lib
                 {
                     result.Add(dr["FKey"].ToString(), dr["FValue"].ToString());
                 }
-
             }
             catch (Exception err)
             {
@@ -906,6 +903,7 @@ namespace iTR.Lib
         }
 
         #region GetWeekIndexOfYear
+
         /// <summary>
         /// 获取年度中的周序号
         /// </summary>
@@ -982,15 +980,17 @@ namespace iTR.Lib
                 }
             }
         }
-        #endregion
+
+        #endregion GetWeekIndexOfYear
 
         #region GetWeekIndexOfYearEx
+
         /// <summary>
         /// 获取年度中的周序号
         /// </summary>
         /// <param name="weekIndx">0：本周；-1：上周；1：下周；-11：上月；10：本月；11下月</param>
         /// <param name="year">返回年度</param>
-        /// <param name="weekOfyear">返回周序号</param>       
+        /// <param name="weekOfyear">返回周序号</param>
         public static void GetWeekIndexOfYearEx(string weekIndx, out string years, out string weekOfyears)
         {
             GregorianCalendar gc = new GregorianCalendar();
@@ -1008,13 +1008,11 @@ namespace iTR.Lib
             //上月
             if (weekIdx == -11)
             {
-
                 if (DateTime.Now.Month == 12)
                 {
                     year = year - 1;
                     //去年十二月
                     weekOfyears = GetMonthsWeek(year, 12);
-
                 }
                 else
                 {
@@ -1082,7 +1080,6 @@ namespace iTR.Lib
 
         #region 获取本周周一日期和周日日期
 
-
         /// <summary>
         /// 得到本周第一天(以星期一为第一天）
         /// </summary>
@@ -1109,7 +1106,6 @@ namespace iTR.Lib
         /// <returns></returns>
         public static DateTime GetWeekLastDaySun(DateTime datetime)
         {
-
             //星期天为最后一天
             int weeknow = Convert.ToInt32(datetime.DayOfWeek);
             weeknow = (weeknow == 0 ? 7 : weeknow);
@@ -1119,9 +1115,10 @@ namespace iTR.Lib
             string LastDay = datetime.AddDays(daydiff).ToString("yyyy-MM-dd");
             return Convert.ToDateTime(LastDay);
         }
-        #endregion
-        #endregion
 
+        #endregion 获取本周周一日期和周日日期
+
+        #endregion GetWeekIndexOfYearEx
 
         public static string GetYearSETime(DateTime dateTime)
         {
@@ -1145,9 +1142,10 @@ namespace iTR.Lib
             DateTime d2 = new DateTime(dateTime.Year, dateTime.Month, monthDay);
             return d1.ToString("yyyy-MM-dd") + "&" + d2.ToString("yyyy-MM-dd");
         }
+
         /// <summary>
         /// 获取流水号 需要在 NumberConfig 表中，提前配置好各表的流水号规则
-        /// 
+        ///
         /// （年号和重置规则： 0 按年份，1 按月份，2 按天）
         /// </summary>
         /// <param name="tablename">表名</param>
@@ -1173,7 +1171,6 @@ namespace iTR.Lib
 
             try
             {
-
                 SQLServerHelper runner = new SQLServerHelper();
                 DataTable dataTable = new DataTable();
                 //根据表名和位数获取 唯一代码规则
@@ -1201,7 +1198,6 @@ namespace iTR.Lib
                 //有该类型的记录
                 if (dataTable.Rows.Count > 0)
                 {
-
                     //年
                     if (comrule == 0)
                     {
@@ -1249,7 +1245,6 @@ namespace iTR.Lib
                     {
                         number = Convert.ToInt32(dataTable.Rows[0]["FIncreaseNumber"]) + 1;
                     }
-
                 }
                 else
                 {
@@ -1260,7 +1255,6 @@ namespace iTR.Lib
                 //用 number计算补多少位0
                 diff = digit - number.ToString().Length;
                 savenumber = number.ToString().Insert(0, new string('0', diff));
-
 
                 renumber = header + rule + savenumber;
                 sql = $"insert into [yaodaibao].[dbo].[Number](FTableFieldName,FIncreaseNumber,FCreateTime) values('{tablename + fieldname}',{savenumber},'{DateTime.Now.ToString()}')";
@@ -1281,7 +1275,6 @@ namespace iTR.Lib
             }
         }
 
-
         /// <summary>
         /// 日期大小比较条件 如果第一个日期参数大于第二个日期参数返回true，否则返回false
         /// </summary>
@@ -1289,15 +1282,13 @@ namespace iTR.Lib
         /// <param name="t2">日期字符串</param>
         /// <param name="type">0.按年份比较，1按月份比较，2按天数比较, 其他按传入的日期最小单位比较</param>
         /// <returns></returns>
-        static bool TimeCompare(DateTime t1, DateTime t2, int type)
+        private static bool TimeCompare(DateTime t1, DateTime t2, int type)
         {
             try
             {
-
                 //年
                 if (type == 0)
                 {
-
                     //t1 大于 t2
                     if ((int.Parse(t1.ToString("yyyy")) - int.Parse(t2.ToString("yyyy"))) > 0)
                     {
@@ -1307,7 +1298,6 @@ namespace iTR.Lib
                 //月
                 else if (type == 1)
                 {
-
                     //t1 大于 t2
                     if ((int.Parse(t1.ToString("yyyyMM")) - int.Parse(t2.ToString("yyyyMM"))) > 0)
                     {
@@ -1317,7 +1307,6 @@ namespace iTR.Lib
                 //日
                 else if (type == 2)
                 {
-
                     //t1 大于 t2
                     if ((int.Parse(t1.ToString("yyyyMMdd")) - int.Parse(t2.ToString("yyyyMMdd"))) > 0)
                     {
@@ -1336,7 +1325,84 @@ namespace iTR.Lib
             }
             catch (Exception err)
             {
+                throw err;
+            }
+        }
 
+        /// <summary>
+        /// 根据查询条件获取具体的开始时间和结束时间
+        /// </summary>
+        /// <param name="weekIndex">周索引</param>
+        /// <returns></returns>
+        public static Tuple<DateTime, DateTime> GetPerTime(string weekIndex)
+        {
+            DateTime startTime, endTime;
+            string temptime;
+            try
+            {
+                switch (weekIndex)
+                {
+                    //本年
+                    case "-1000":
+                        temptime = Common.GetYearSETime(DateTime.Now);
+                        startTime = DateTime.Parse(temptime.Split('&')[0]);
+                        endTime = DateTime.Parse(temptime.Split('&')[1]);
+                        break;
+                    //上月
+                    case "-11":
+                        temptime = Common.GetMonthTime(DateTime.Now.AddMonths(-1));
+                        startTime = DateTime.Parse(temptime.Split('&')[0]);
+                        endTime = DateTime.Parse(temptime.Split('&')[1]);
+                        break;
+                    //本月
+                    case "10":
+                        temptime = Common.GetMonthTime(DateTime.Now);
+                        startTime = DateTime.Parse(temptime.Split('&')[0]);
+                        endTime = DateTime.Parse(temptime.Split('&')[1]);
+                        break;
+                    //上周
+                    case "-1":
+                        startTime = Common.GetWeekFirstDayMon(DateTime.Now.AddDays(-7));
+                        endTime = Common.GetWeekLastDaySun(DateTime.Now.AddDays(-7));
+                        break;
+                    //本周
+                    case "0":
+                        startTime = Common.GetWeekFirstDayMon(DateTime.Now);
+                        endTime = Common.GetWeekLastDaySun(DateTime.Now);
+                        break;
+
+                    default:
+                        throw new Exception();
+                }
+                return Tuple.Create(startTime, endTime);
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+        }
+
+        /// <summary>
+        /// 根据查询条件获取周具体属于哪一年
+        /// </summary>
+        /// <param name="weekIndex">周索引</param>
+        /// <returns>返回结果例如 202035|202036|202037 </returns>
+        public static string GetYearWithWeeks(string weekIndex)
+        {
+            try
+            {
+                string years, weekOfyears;
+                List<string> list = new List<string>();
+                Common.GetWeekIndexOfYearEx(weekIndex, out years, out weekOfyears);
+                string[] weeks = weekOfyears.Split('|');
+                for (int i = 0; i < weeks.Length; i++)
+                {
+                    list.Add("'" + years + weeks[i] + "'");
+                }
+                return string.Join(",", list.ToArray());
+            }
+            catch (Exception err)
+            {
                 throw err;
             }
         }
