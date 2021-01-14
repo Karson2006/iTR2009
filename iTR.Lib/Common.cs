@@ -1042,16 +1042,19 @@ namespace iTR.Lib
             years = year.ToString();
         }
 
-        //
-
         /// <summary>
         /// 获取属于某月的所有周序号
         /// </summary>
         /// <param name="year">某年</param>
         /// <param name="month">某月</param>
         /// <returns></returns>
-        private static string GetMonthsWeek(int year, int month)
+        public static string GetMonthsWeek(int year, int month)
         {
+            if (month == 0)
+            {
+                month = 12;
+                year -= 1;
+            }
             string monthweek;
             int firstweek;
             int lastweek;
