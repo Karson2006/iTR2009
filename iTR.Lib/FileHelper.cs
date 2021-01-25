@@ -110,10 +110,6 @@ namespace iTR.Lib
             try
             {
                 byte[] fs = Convert.FromBase64String(base64String);
-
-                // string fileSize = ((base64String.Replace("=", "").Length/8)*2).ToString();
-
-                //string fullpath = @"D:\Work\yaodaibao\Code\Release\Files";/// 调试用
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
